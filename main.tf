@@ -111,16 +111,16 @@ resource "vsphere_virtual_machine" "vm" {
   scsi_bus_sharing       = var.scsi_bus_sharing
   scsi_type              = var.scsi_type != "" ? var.scsi_type : (var.content_library == null ? data.vsphere_virtual_machine.template[0].scsi_type : null)
   scsi_controller_count = max(
-    max(0, flatten([
+    max(0, flatten([[
       for item in values(var.data_disk) : [
         for elem, val in item :
         elem == "data_disk_scsi_controller" ? val : 0
-    ]])...) + 1,
-    ceil((max(0, flatten([
+    ]]])...) + 1,
+    ceil((max(0, flatten([[
       for item in values(var.data_disk) : [
         for elem, val in item :
         elem == "unit_number" ? val : 0
-    ]])...) + 1) / 15),
+    ]]])...) + 1) / 15),
   var.scsi_controller)
   wait_for_guest_net_routable = var.wait_for_guest_net_routable
   wait_for_guest_ip_timeout   = var.wait_for_guest_ip_timeout
